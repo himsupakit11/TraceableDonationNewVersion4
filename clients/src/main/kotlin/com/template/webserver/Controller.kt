@@ -70,7 +70,7 @@ class Controller {
 
     @CrossOrigin
     // Get available campaign
-    @GetMapping("/campaigns/availableCampaign")
+    @GetMapping("/campaigns")
     fun fetchAvailableCampaign(): Array<Campaign> = getAvailableCampaign()
 
     @CrossOrigin
