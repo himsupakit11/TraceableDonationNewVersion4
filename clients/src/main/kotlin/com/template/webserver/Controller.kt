@@ -52,7 +52,7 @@ class Controller {
     @Autowired
     lateinit var rpc: CordaRPCOps
     @CrossOrigin
-    private fun getAllCampaign(): Array<Campaign> {
+    private fun getAvailableCampaign(): Array<Campaign> {
         logger.info("getAvailableCampaign")
         val generalCriteria = QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED)
         val vault = rpc.vaultQueryBy<Campaign>(generalCriteria).states.filter { it.state.data.status == "Available" }
@@ -67,11 +67,20 @@ class Controller {
         val states = vault.filterStatesOfType<Campaign>()
         return states.map { it.state.data }.toTypedArray()
     }
+    @CrossOrigin
+    private fun getAllCampaign(): Array<Campaign> {
+        val vault = rpc.vaultQueryBy<Campaign>().states
+        val states = vault.filterStatesOfType<Campaign>()
+        return states.map { it.state.data }.toTypedArray()
+    }
+    @CrossOrigin
+    @GetMapping("/campaigns")
+    fun fetchCampaign(): Array<Campaign> = getAllCampaign()
 
     @CrossOrigin
     // Get available campaign
-    @GetMapping("/campaigns")
-    fun fetchCampaign(): Array<Campaign> = getAllCampaign()
+    @GetMapping("/campaigns/availableCampaign")
+    fun fetchAvailableCampaign(): Array<Campaign> = getAvailableCampaign()
 
     @CrossOrigin
     // Get out of date campaign
